@@ -1,49 +1,42 @@
 import 'dart:developer';
+import 'dart:isolate';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 import 'package:white_noise/white_noice/blocs/audio_manager/audio_manager_bloc.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:white_noise/white_noice/data/stream_30_minut.dart';
+
 
 part 'audio_play_event.dart';
 part 'audio_play_state.dart';
 
 class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
   AudioManagerBloc blocValue;
-  TimerIsolate timerIsolate;
 
   final player = AudioPlayer();
 
   AudioPlayBloc({required this.blocValue})
-      : timerIsolate = TimerIsolate(),
-        super(const AudioPlayState(audioStatus: AudioStatus.stop)) {
+      : super(const AudioPlayState(audioStatus: AudioStatus.stop)) {
     on<AudioPlayTapped>((event, emit) async {
-      if (!(timerIsolate.isClosed)) {
-        log(timerIsolate.isClosed.toString(), name: "AudioPlayBloc if first");
-        timerIsolate.stopTimer();
-        log(timerIsolate.isClosed.toString(), name: "AudioPlayBloc if second");
-      }
       emit(AudioPlayState(
           audioStatus: AudioStatus.play, songName: event.songName));
       log(blocValue.audioRepository.returnSongs()[event.songName],
           name: 'Found music log: ');
 
+      final receivePort = ReceivePort();
+
+      await Isolate.spawn(goLimitTime, receivePort.sendPort);
+
+      receivePort.listen((message) {
+        print(message);
+        log(message, name: "ReceivePort mmessages");
+        return add(AudioStopedFromLimits());
+      });
       String assetSource =
           blocValue.audioRepository.returnSongs()[event.songName];
 
-      timerIsolate.startTimer();
       await player.play(AssetSource(assetSource));
-
-      timerIsolate.timerStream.listen((event) async {
-        await player.pause();
-        add(AudioStopedFromLimits());
-        log('Event int < 5 ', name: 'Timer < 5 LOG');
-      });
-
-      print(timerIsolate);
-      log(timerIsolate.toString());
 
       player.onPlayerComplete.listen((event) {
         player.play(
@@ -54,6 +47,7 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
 
     on<AudioStopedFromLimits>((event, emit) async {
       print('ITS AudioStopedFromLimits COMPLATED ');
+      await player.stop();
       emit(const AudioPlayState(audioStatus: AudioStatus.limitStop));
     });
 
@@ -70,4 +64,11 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
       }
     });
   }
+}
+
+goLimitTime(SendPort sendPort) async {
+  await Future.delayed(const Duration(seconds: 10));
+  print('Time IS GONE');
+  log('TIME IS GONE LOG', name: "goLimitTime(sendPort)");
+  sendPort.send('TIME IS GONE');
 }
