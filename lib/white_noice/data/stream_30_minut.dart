@@ -1,30 +1,22 @@
 import 'dart:async';
+import 'dart:developer';
 
 class TimerIsolate {
   late StreamController<int> _timerController;
   late Stream<int> timerStream;
-  int counter = 0;
 
   TimerIsolate() {
     _timerController = StreamController<int>();
     timerStream = _timerController.stream;
-    startTimer();
   }
 
   void startTimer() {
-    const Duration delay = Duration(seconds: 1);
+    const Duration delay = Duration(seconds: 5);
 
     Future<void> delayedFunction() async {
       await Future.delayed(delay);
-      counter++;
-      _timerController.add(counter);
-
-      if (counter <= 5) {
-        startTimer();
-      } else {
-        print('HERE WE CLOSE TIMER');
-        stopTimer();
-      }
+      _timerController.add(0);
+      stopTimer();
     }
 
     delayedFunction();
@@ -32,13 +24,16 @@ class TimerIsolate {
 
   void stopTimer() {
     _timerController.close();
+
+    log(_timerController.isClosed.toString(),
+        name: 'void stopTimer LOG from TimerIsolate');
     print('Timer stopped.');
     print('NecroMantia FIRST');
     _timerController = StreamController<int>();
     timerStream = _timerController.stream;
-    if (_timerController.isClosed) {
-      print('NecroMantia SECOND?');
-      _timerController = StreamController<int>();
-    }
+    
   }
+
+  bool get isClosed => _timerController.isClosed;
+  bool get isPaused => _timerController.isPaused;
 }

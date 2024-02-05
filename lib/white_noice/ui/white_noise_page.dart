@@ -7,14 +7,9 @@ import 'package:white_noise/white_noice/blocs/audio_play/audio_play_bloc.dart';
 
 import 'package:white_noise/white_noice/ui/widgets/audio_card.dart';
 
-class WhiteNoisePage extends StatefulWidget {
+class WhiteNoisePage extends StatelessWidget {
   const WhiteNoisePage({Key? key}) : super(key: key);
 
-  @override
-  State<WhiteNoisePage> createState() => _WhiteNoisePageState();
-}
-
-class _WhiteNoisePageState extends State<WhiteNoisePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,20 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:white_noise/white_noice/blocs/audio_play/audio_play_bloc.dart';
 import 'package:white_noise/white_noice/ui/widgets/validator.dart';
 
-class AudioCard extends StatefulWidget {
+class AudioCard extends StatelessWidget {
   final String songName;
   const AudioCard({required this.songName, super.key});
 
-  @override
-  State<AudioCard> createState() => _AudioCardState();
-}
-
-class _AudioCardState extends State<AudioCard> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AudioPlayBloc, AudioPlayState>(
@@ -23,17 +16,17 @@ class _AudioCardState extends State<AudioCard> {
           onTap: () {
             context
                 .read<AudioPlayBloc>()
-                .add(AudioPlayTapped(songName: widget.songName)); // TODO
+                .add(AudioPlayTapped(songName: songName)); // TODO
           },
           child: Card(
             child: ListTile(
-              title: Text(widget.songName),
+              title: Text(songName),
               trailing: IconButton(
-                icon: validator(state, widget.songName), // TODO
+                icon: validator(state, songName), // TODO
                 onPressed: () {
                   context
                       .read<AudioPlayBloc>()
-                      .add(AudioPauseTapped(songName: widget.songName));
+                      .add(AudioPauseTapped(songName: songName));
                 },
               ),
             ),

@@ -17,8 +17,14 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
   final player = AudioPlayer();
 
   AudioPlayBloc({required this.blocValue})
-      : timerIsolate = TimerIsolate(), super(const AudioPlayState(audioStatus: AudioStatus.stop)) {
+      : timerIsolate = TimerIsolate(),
+        super(const AudioPlayState(audioStatus: AudioStatus.stop)) {
     on<AudioPlayTapped>((event, emit) async {
+      if (!(timerIsolate.isClosed)) {
+        log(timerIsolate.isClosed.toString(), name: "AudioPlayBloc if first");
+        timerIsolate.stopTimer();
+        log(timerIsolate.isClosed.toString(), name: "AudioPlayBloc if second");
+      }
       emit(AudioPlayState(
           audioStatus: AudioStatus.play, songName: event.songName));
       log(blocValue.audioRepository.returnSongs()[event.songName],
@@ -27,16 +33,13 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
       String assetSource =
           blocValue.audioRepository.returnSongs()[event.songName];
 
+      timerIsolate.startTimer();
       await player.play(AssetSource(assetSource));
 
       timerIsolate.timerStream.listen((event) async {
-        if (event < 5) {
-          log('Event int > 5 ', name: 'Timer > 5 LOG');
-        } else {
-          await player.pause();
-          add(AudioStopedFromLimits());
-          log('Event int < 5 ', name: 'Timer < 5 LOG');
-        }
+        await player.pause();
+        add(AudioStopedFromLimits());
+        log('Event int < 5 ', name: 'Timer < 5 LOG');
       });
 
       print(timerIsolate);
