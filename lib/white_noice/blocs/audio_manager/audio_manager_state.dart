@@ -9,7 +9,7 @@ enum AudioPageStatus {
   success,
 }
 
-final class AudioManagerState {
+final class AudioManagerState extends Equatable {
   const AudioManagerState(
       {this.songName = const [],
       this.audioPageStatus = AudioPageStatus.initial});
@@ -26,4 +26,7 @@ final class AudioManagerState {
         audioPageStatus: audioPageStatus =
             audioPageStatus ?? this.audioPageStatus);
   }
+
+  @override
+  List<Object?> get props => [songName, audioPageStatus];
 }

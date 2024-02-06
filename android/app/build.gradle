@@ -24,10 +24,13 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.white_noise"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33 // add here was changed
     ndkVersion flutter.ndkVersion
+    
 
     compileOptions {
+        coreLibraryDesugaringEnabled true // add here
+  
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -50,6 +53,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true // add here
+        
     }
 
     buildTypes {
@@ -66,5 +70,6 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.android.support:multidex:2.0.1'
+    implementation 'com.android.support:multidex:2.0.1' // add here
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2' // add here
 }

@@ -7,9 +7,9 @@ import 'package:white_noise/white_noice/blocs/audio_play/audio_play_bloc.dart';
 import 'package:white_noise/white_noice/ui/white_noise_page.dart';
 
 void main() async {
-  Bloc.observer = MyGlobalObserver();
+  Bloc.observer = DetailedBlocObserver();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

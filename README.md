@@ -19,3 +19,4 @@ was add C:\flutter_projects\white_noise\android\app\src\main\AndroidManifest.xml
 also add C:\flutter_projects\white_noise\android\app\build.gradle => multiDexEnabled true  && dependencies {
     implementation 'com.android.support:multidex:2.0.1 ' &&  android:usesCleartextTraffic="true" in activity
 }// add here
+

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:white_noise/white_noice/blocs/audio_manager/audio_manager_bloc.dart';
@@ -15,30 +13,42 @@ class WhiteNoisePage extends StatelessWidget {
     return Scaffold(
       body: BlocListener<AudioPlayBloc, AudioPlayState>(
         listener: (context, state) {
-          print('HELLOLOLOLOOLOOLOLO');
-          log('HELLOLOOLOLO');
-          log(state.audioStatus.toString(), name: 'LOGGG');
           if (state.audioStatus == AudioStatus.limitStop) {
-            log('The music stopped because of the limit', name: 'Limit LOG');
-
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('The music stopped because of the limit')));
           }
         },
         child: BlocBuilder<AudioManagerBloc, AudioManagerState>(
           builder: (context, state) {
-            return state.songName.isNotEmpty
-                ? ListView.builder(
-                    itemBuilder: (context, index) {
-                      return AudioCard(
-                        songName: state.songName[index],
-                      );
-                    },
-                    itemCount: state.songName.length,
-                  )
-                : const Center(
-                    child: Text('Please refresh page'),
-                  );
+            switch (state.audioPageStatus) {
+              case AudioPageStatus.loading:
+                {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              case AudioPageStatus.initial:
+                {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              case AudioPageStatus.success:
+                {
+                  return state.songName.isNotEmpty
+                      ? ListView.builder(
+                          itemBuilder: (context, index) {
+                            return AudioCard(
+                              songName: state.songName[index],
+                            );
+                          },
+                          itemCount: state.songName.length,
+                        )
+                      : const Center(
+                          child: Text('NO MUSIC FROM DATA'),
+                        );
+                }
+              case AudioPageStatus.error:
+                {
+                  return const Center(child: Text('Please refresh page'));
+                }
+            }
           },
         ),
       ),

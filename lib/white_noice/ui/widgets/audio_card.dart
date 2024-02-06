@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:white_noise/white_noice/blocs/audio_play/audio_play_bloc.dart';
-import 'package:white_noise/white_noice/ui/widgets/validator.dart';
 
 class AudioCard extends StatelessWidget {
   final String songName;
+
   const AudioCard({required this.songName, super.key});
 
   @override
@@ -16,18 +16,27 @@ class AudioCard extends StatelessWidget {
           onTap: () {
             context
                 .read<AudioPlayBloc>()
-                .add(AudioPlayTapped(songName: songName)); // TODO
+                .add(AudioPlayTapped(songName: songName));
           },
           child: Card(
             child: ListTile(
               title: Text(songName),
-              trailing: IconButton(
-                icon: validator(state, songName), // TODO
-                onPressed: () {
-                  context
-                      .read<AudioPlayBloc>()
-                      .add(AudioPauseTapped(songName: songName));
-                },
+              trailing: AbsorbPointer(
+                absorbing: state.songName != songName,
+                child: IconButton(
+                  icon: state.audioStatus == AudioStatus.play &&
+                          state.songName == songName
+                      ? const Icon(Icons.pause)
+                      : (state.audioStatus == AudioStatus.pause &&
+                              state.songName == songName
+                          ? const Icon(Icons.play_arrow)
+                          : const Opacity(opacity: 0.0)),
+                  onPressed: () {
+                    context
+                        .read<AudioPlayBloc>()
+                        .add(AudioPauseTapped(songName: songName));
+                  },
+                ),
               ),
             ),
           ),

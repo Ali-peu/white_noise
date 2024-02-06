@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:white_noise/white_noice/data/audio_repository.dart';
 
@@ -11,10 +12,6 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
   AudioManagerBloc()
       : super(
             const AudioManagerState(audioPageStatus: AudioPageStatus.initial)) {
-    on<AudioManagerEvent>((event, emit) {
-      print('${audioRepository.returnSongs().keys.first}');
-    });
-
     on<OnPageOpened>((event, emit) {
       emit(const AudioManagerState(
           audioPageStatus: AudioPageStatus.initial, songName: []));
