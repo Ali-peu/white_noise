@@ -8,6 +8,9 @@ class AudioCard extends StatelessWidget {
 
   const AudioCard({required this.songName, super.key});
 
+  // Давай перепишем функционал, что обходиться без нажатия именно на иконку,
+  // То есть работаем только с нажатием на всё поле, и там уже происходит переключение
+  // с Play на Pause.
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AudioPlayBloc, AudioPlayState>(

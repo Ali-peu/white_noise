@@ -1,6 +1,7 @@
-
 class AudioRepository {
   Map<String, dynamic> returnSongs() {
+    // Подготовь на будущее, функционал.
+    // Аудио это обьект имеющий путь, название, uid, картинку, и bool параметр premium
     Map<String, dynamic> songs = {};
     songs['white1'] = 'white_noises/white1.mp3';
     songs['white2'] = 'white_noises/white2.mp3';
@@ -10,7 +11,4 @@ class AudioRepository {
 
     return songs;
   }
-
- 
-
 }

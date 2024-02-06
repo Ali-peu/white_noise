@@ -15,6 +15,9 @@ part 'audio_play_event.dart';
 part 'audio_play_state.dart';
 
 class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
+  // !Очень не стоит так делать, соблюдай независимость Блоков.
+  // Блоки не знают о существовании других Блоков, если нужно передать репозиторий,
+  // Передай репозиторий
   AudioManagerBloc blocValue;
 
   late bool isMusicPlay;
@@ -23,14 +26,13 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
 
   LimitedCountdown countdown = LimitedCountdown();
 
+  // Давай использовать при инициализации статус initial что бы не путаться
   AudioPlayBloc({required this.blocValue})
       : super(const AudioPlayState(audioStatus: AudioStatus.stop)) {
     on<AudioPlayTapped>(
         (event, emit) async => await _audioPlayTapped(emit, event));
-
     on<AudioStopedFromLimits>(
-        (event, emit) async => await _audioStoppedFromLimits(emit));
-
+        (_, emit) async => await _audioStoppedFromLimits(emit));
     on<AudioPauseTapped>((event, emit) async => audioPausedTapped(emit, event));
   }
 
@@ -43,6 +45,7 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
           audioStatus: AudioStatus.stop, songName: event.songName));
     } else if (state.audioStatus == AudioStatus.pause) {
       player.play();
+      // Создаём конструктор .copyWith что бы его не использовать?)
       emit(AudioPlayState(
           audioStatus: AudioStatus.play, songName: state.songName));
     } else {
@@ -59,6 +62,8 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
 
   Future<void> _audioPlayTapped(
       Emitter<AudioPlayState> emit, AudioPlayTapped event) async {
+    // !Если переопределяешь стрим, отписывай его в любом случае.
+    // Нельзя так легко полагаться на Garbage Collector
     if (state.audioStatus != AudioStatus.stop) {
       countdown.stopTimer();
     }
@@ -71,7 +76,7 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
         blocValue.audioRepository.returnSongs()[event.songName];
 
     await player.setAsset("assets/$assetSource");
-    await player.setLoopMode(LoopMode.all);
+    await player.setLoopMode(LoopMode.all); // Вынеси в конструктор
     player.play();
 
     emit(AudioPlayState(
@@ -79,11 +84,14 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
 
     isMusicPlay = state.audioStatus == AudioStatus.play;
 
+    // Старайся убирать лишние логи, когда закончил дебаг
+    // Возвращаться к этому потом всегда лень. А забитый лог затрудняет работу.
     log('Just cjeck');
 
     if (state.audioStatus == AudioStatus.stop) {
       countdown.stopTimer();
     }
+    // Вынеси функцию коллбэка отдельно, и передавай по имени,
     countdown.startTimer(() async {
       log(player.playing.toString(), name: 'Playing status');
       player.stop();
