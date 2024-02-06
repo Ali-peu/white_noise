@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:isolate';
 
 class LimitedCountdown {
   late Timer _timer;
@@ -8,7 +7,8 @@ class LimitedCountdown {
   LimitedCountdown();
 
   void startTimer(Function() callback) {
-    const Duration delay = Duration(seconds: 7);
+    
+    const Duration delay = Duration(seconds: 6);
     // _timer = Timer(delay, callback);
     _timer = Timer.periodic(delay, (Timer timer) {
       if (!_isPaused) {

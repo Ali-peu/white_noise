@@ -1,33 +1,56 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class LocalNotificationServise {
-  static final LocalNotificationServise _localNotificationServise =
-      LocalNotificationServise._internal();
+class LocalNotificationService {
+  static final FlutterLocalNotificationsPlugin _notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
-  factory LocalNotificationServise() {
-    return _localNotificationServise;
-  }
+  static void initialize() async {
+    // Initialization  setting for android
 
-  LocalNotificationServise._internal();
-
-  void askRequest() {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-    flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission();
-  }
-
-  void init() async{
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon'); // TODO
-
-    const InitializationSettings initializationSettings =
+    const InitializationSettings initializationSettingsAndroid =
         InitializationSettings(
-            android: initializationSettingsAndroid, iOS: null, macOS: null);
+            android: AndroidInitializationSettings("@drawable/ic_launcher"));
+    _notificationsPlugin.initialize(
+      initializationSettingsAndroid,
+      // to handle event when we receive notification
+      onDidReceiveNotificationResponse: (details) {
+        if (details.input != null) {}
+      },
+    );
 
-    //  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        // onSelectNotification: selectNotification);
+    var androidPlatformChannelSpecifics = const AndroidNotificationChannel(
+      'my_unique_channel_id', // уникальный идентификатор канала
+      'My Notification Channel', // имя канала
+
+      importance: Importance.high,
+      // priority: Priority.high, // Уберите эту строку, если она вызывает ошибку
+    );
+
+    if (Platform.isAndroid) {
+      // TODO IOS
+      await _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(androidPlatformChannelSpecifics);
+      await _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.requestNotificationsPermission();
+    }
+  }
+
+  void showNotificationOnLimits(String tittle, String body) async {
+    await _notificationsPlugin.show(
+        0,
+        tittle,
+        body,
+        const NotificationDetails(
+            android: AndroidNotificationDetails(
+          'my_unique_channel_id',
+          'My Notification Channel',
+        )));
   }
 }

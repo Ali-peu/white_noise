@@ -27,7 +27,7 @@ class AudioCard extends StatelessWidget {
                   icon: state.audioStatus == AudioStatus.play &&
                           state.songName == songName
                       ? const Icon(Icons.pause)
-                      : (state.audioStatus == AudioStatus.pause &&
+                      : (state.audioStatus == AudioStatus.stop &&
                               state.songName == songName
                           ? const Icon(Icons.play_arrow)
                           : const Opacity(opacity: 0.0)),

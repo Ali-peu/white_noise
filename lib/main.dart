@@ -3,11 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:white_noise/simple_bloc_observer.dart';
 import 'package:white_noise/white_noice/blocs/audio_manager/audio_manager_bloc.dart';
 import 'package:white_noise/white_noice/blocs/audio_play/audio_play_bloc.dart';
+import 'package:white_noise/white_noice/domain/local_notification_servise.dart';
 
 import 'package:white_noise/white_noice/ui/white_noise_page.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = DetailedBlocObserver();
+  LocalNotificationService.initialize();
 
   runApp(const MyApp());
 }
