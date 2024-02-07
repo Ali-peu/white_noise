@@ -22,7 +22,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AudioManagerBloc audioManagerBloc = AudioManagerBloc();
 
-    AudioPlayBloc audioPlayBloc = AudioPlayBloc(blocValue: audioManagerBloc);
+    AudioPlayBloc audioPlayBloc =
+        AudioPlayBloc(audioRepository: audioManagerBloc.audioRepository);
 
     return MaterialApp(
       theme: ThemeData.light(),

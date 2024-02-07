@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:white_noise/white_noice/blocs/audio_play/audio_play_bloc.dart';
+import 'package:white_noise/white_noice/ui/widgets/music_status_icon.dart';
 
 class AudioCard extends StatelessWidget {
   final String songName;
@@ -24,23 +25,8 @@ class AudioCard extends StatelessWidget {
           child: Card(
             child: ListTile(
               title: Text(songName),
-              trailing: AbsorbPointer(
-                absorbing: state.songName != songName,
-                child: IconButton(
-                  icon: state.audioStatus == AudioStatus.play &&
-                          state.songName == songName
-                      ? const Icon(Icons.pause)
-                      : (state.audioStatus == AudioStatus.stop &&
-                              state.songName == songName
-                          ? const Icon(Icons.play_arrow)
-                          : const Opacity(opacity: 0.0)),
-                  onPressed: () {
-                    context
-                        .read<AudioPlayBloc>()
-                        .add(AudioPauseTapped(songName: songName));
-                  },
-                ),
-              ),
+              trailing:
+                  musicStatusIcon(state.audioStatus, state.songName, songName),
             ),
           ),
         );

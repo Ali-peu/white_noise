@@ -1,16 +1,15 @@
 part of 'audio_play_bloc.dart';
 
-enum AudioStatus { loading, play, pause, stop, limitStop }
+enum AudioStatus { initial, loading, play, pause, stop, limitStop, trackChange }
 
 final class AudioPlayState extends Equatable {
   const AudioPlayState(
-      {this.audioStatus = AudioStatus.stop, this.songName = ''});
+      {this.audioStatus = AudioStatus.initial, this.songName = ''});
 
   final AudioStatus audioStatus;
   final String songName;
 
-  AudioPlayState copyWith(
-      {AudioStatus? audioStatus, String? songName, bool? musicIsPlaying}) {
+  AudioPlayState copyWith({AudioStatus? audioStatus, String? songName}) {
     return AudioPlayState(
         audioStatus: audioStatus = audioStatus ?? this.audioStatus,
         songName: songName = songName ?? this.songName);

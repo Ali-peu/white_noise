@@ -13,13 +13,18 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
       : super(
             const AudioManagerState(audioPageStatus: AudioPageStatus.initial)) {
     // вынеси в метод
-    on<OnPageOpened>((event, emit) {
-      emit(const AudioManagerState(
-          audioPageStatus: AudioPageStatus.initial, songName: []));
-
-      List<String> songs = audioRepository.returnSongs().keys.toList();
-      emit(AudioManagerState(
-          audioPageStatus: AudioPageStatus.success, songName: songs));
-    });
+    on<OnPageOpened>(
+        (event, emit) => _onPageOpened(event, emit, audioRepository));
   }
+}
+
+Future<void> _onPageOpened(OnPageOpened event, Emitter<AudioManagerState> emit,
+    AudioRepository audioRepository) async {
+  
+  emit(const AudioManagerState(
+      audioPageStatus: AudioPageStatus.initial, songName: []));
+
+  List<String> songs = audioRepository.returnSongs().keys.toList();
+  emit(AudioManagerState(
+      audioPageStatus: AudioPageStatus.success, songName: songs));
 }

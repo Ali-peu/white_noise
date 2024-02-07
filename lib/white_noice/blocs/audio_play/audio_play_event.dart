@@ -16,7 +16,6 @@ class AudioPauseTapped extends AudioPlayEvent {
   AudioPauseTapped({required this.songName});
 
   @override
-  // TODO: implement props
   List<Object?> get props => [songName];
 }
 
