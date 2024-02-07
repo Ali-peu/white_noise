@@ -12,6 +12,7 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
   AudioManagerBloc()
       : super(
             const AudioManagerState(audioPageStatus: AudioPageStatus.initial)) {
+    // вынеси в метод
     on<OnPageOpened>((event, emit) {
       emit(const AudioManagerState(
           audioPageStatus: AudioPageStatus.initial, songName: []));

@@ -7,10 +7,10 @@ class LimitedCountdown {
   LimitedCountdown();
 
   void startTimer(Function() callback) {
-    
+    // Это свойство класса
     const Duration delay = Duration(seconds: 6);
     // _timer = Timer(delay, callback);
-    _timer = Timer.periodic(delay, (Timer timer) {
+    _timer = Timer.periodic(delay, (_) {
       if (!_isPaused) {
         callback();
       }
