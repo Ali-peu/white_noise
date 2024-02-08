@@ -13,6 +13,8 @@ part 'audio_play_event.dart';
 part 'audio_play_state.dart';
 
 class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
+  // Приватные свойства стоит делать приватными, как и методы.
+  // Что бы завтра не было соблазна вызвать их снаружи
   AudioRepository audioRepository;
 
   final player = AudioPlayer();
@@ -40,6 +42,7 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
             audioStatus: AudioStatus.stop, songName: state.songName));
       }
     } else {
+      // Недостижимый код
       add(AudioPlayTapped(songName: event.songName));
     }
   }
@@ -66,7 +69,9 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
         countdown.stopTimer();
         emit(AudioPlayState(
             audioStatus: AudioStatus.trackChange, songName: event.songName));
-        add(AudioPlayTapped(songName: event.songName));
+        add(AudioPlayTapped(
+            songName: event
+                .songName)); // Спагетти, подумай лучше, зачем снова вызывать себя
       }
     } else {
       countdown = LimitedCountdown();
@@ -93,6 +98,7 @@ class AudioPlayBloc extends Bloc<AudioPlayEvent, AudioPlayState> {
     await audioPlayer.stop();
 
     add(AudioStopedFromLimits(songName: songName));
+    //? (Это пометка для меня, на подумать.)
     LocalNotificationService().showNotificationOnLimits('Timer', 'Buy premium');
 
     countdown.stopTimer();

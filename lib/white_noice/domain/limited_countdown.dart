@@ -7,7 +7,7 @@ class LimitedCountdown {
   LimitedCountdown();
 
   void startTimer(Function() callback) {
-    // Это свойство класса
+    //! Это свойство класса
     const Duration delay = Duration(seconds: 6);
     // _timer = Timer(delay, callback);
     _timer = Timer.periodic(delay, (_) {
@@ -20,7 +20,8 @@ class LimitedCountdown {
   void stopTimer() {
     if (_timer.isActive) {
       _timer.cancel();
-      print('Timer stopped.');
+      print(
+          'Timer stopped.'); // Log! Или если используешь принт для дебага, удаляй их сразу, что бы не забыть
     }
   }
 
