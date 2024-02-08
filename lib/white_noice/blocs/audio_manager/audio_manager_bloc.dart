@@ -20,11 +20,13 @@ class AudioManagerBloc extends Bloc<AudioManagerEvent, AudioManagerState> {
 
 Future<void> _onPageOpened(OnPageOpened event, Emitter<AudioManagerState> emit,
     AudioRepository audioRepository) async {
-  
   emit(const AudioManagerState(
       audioPageStatus: AudioPageStatus.initial, songName: []));
 
-  List<String> songs = audioRepository.returnSongs().keys.toList();
+  List<String> songs = audioRepository
+      .returnSongs()
+      .keys
+      .toList(); // Лучше определи геттер в классе репозитория, чем так заморачиватсья в каждом месте
   emit(AudioManagerState(
       audioPageStatus: AudioPageStatus.success, songName: songs));
 }

@@ -10,6 +10,6 @@ Widget musicStatusIcon(
       currentPlayMusic == cardSongName) {
     return const Icon(Icons.play_arrow);
   } else {
-    return const Opacity(opacity: 0.0);
+    return const SizedBox();
   }
 }
