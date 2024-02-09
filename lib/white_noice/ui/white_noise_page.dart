@@ -31,14 +31,14 @@ class WhiteNoisePage extends StatelessWidget {
                 }
               case AudioPageStatus.success:
                 {
-                  return state.songName.isNotEmpty
+                  return state.music.isNotEmpty
                       ? ListView.builder(
                           itemBuilder: (context, index) {
                             return AudioCard(
-                              songName: state.songName[index],
+                              music: state.music[index],
                             );
                           },
-                          itemCount: state.songName.length,
+                          itemCount: state.music.length,
                         )
                       : const Center(
                           child: Text('NO MUSIC FROM DATA'),

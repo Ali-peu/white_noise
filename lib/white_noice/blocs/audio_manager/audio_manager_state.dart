@@ -11,22 +11,22 @@ enum AudioPageStatus {
 
 final class AudioManagerState extends Equatable {
   const AudioManagerState(
-      {this.songName = const [],
+      {this.music = const [],
       this.audioPageStatus = AudioPageStatus.initial});
 
-  final List<String> songName;
+  final List<MusicModel> music;
   final AudioPageStatus audioPageStatus;
 
   AudioManagerState copyWith({
-    List<String>? songName,
+    List<MusicModel>? music,
     AudioPageStatus? audioPageStatus,
   }) {
     return AudioManagerState(
-        songName: songName = songName ?? this.songName,
+        music: music = music ?? this.music,
         audioPageStatus: audioPageStatus =
             audioPageStatus ?? this.audioPageStatus);
   }
 
   @override
-  List<Object?> get props => [songName, audioPageStatus];
+  List<Object?> get props => [music, audioPageStatus];
 }

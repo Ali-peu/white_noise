@@ -2,35 +2,19 @@ import 'dart:async';
 
 class LimitedCountdown {
   late Timer _timer;
-  bool _isPaused = false;
+  final Duration delay;
 
-  LimitedCountdown();
+  LimitedCountdown({required this.delay});
 
   void startTimer(Function() callback) {
-    // Это свойство класса
-    const Duration delay = Duration(seconds: 6);
-    // _timer = Timer(delay, callback);
     _timer = Timer.periodic(delay, (_) {
-      if (!_isPaused) {
-        callback();
-      }
+      callback();
     });
   }
 
-  void stopTimer() {
+  Future<void> stopTimer() async {
     if (_timer.isActive) {
       _timer.cancel();
-      print('Timer stopped.');
     }
-  }
-
-  void pauseTimer() {
-    _isPaused = true;
-    print('Timer paused.');
-  }
-
-  void resumeTimer() {
-    _isPaused = false;
-    print('Timer resumed.');
   }
 }

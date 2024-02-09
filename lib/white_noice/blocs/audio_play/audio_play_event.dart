@@ -4,24 +4,25 @@ part of 'audio_play_bloc.dart';
 sealed class AudioPlayEvent extends Equatable {}
 
 class AudioPlayTapped extends AudioPlayEvent {
-  final String songName;
-  AudioPlayTapped({required this.songName});
+  final MusicModel music;
+
+  AudioPlayTapped({required this.music});
 
   @override
-  List<Object?> get props => [songName];
+  List<Object?> get props => [music];
 }
 
 class AudioPauseTapped extends AudioPlayEvent {
-  final String songName;
-  AudioPauseTapped({required this.songName});
+  final MusicModel music;
+  AudioPauseTapped({required this.music});
 
   @override
-  List<Object?> get props => [songName];
+  List<Object?> get props => [music];
 }
 
 class AudioStopedFromLimits extends AudioPlayEvent {
-  final String songName;
-  AudioStopedFromLimits({required this.songName});
+  final MusicModel music;
+  AudioStopedFromLimits({required this.music});
   @override
-  List<Object?> get props => [songName];
+  List<Object?> get props => [music];
 }

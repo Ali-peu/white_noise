@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:white_noise/white_noice/blocs/audio_play/audio_play_bloc.dart';
+import 'package:white_noise/white_noice/domain/music_model.dart';
 
-Widget musicStatusIcon(
-    AudioStatus audioStatus, String currentPlayMusic, String cardSongName) {
+Widget musicStatusIcon(AudioStatus audioStatus, MusicModel currentPlayMusic,
+    MusicModel cardSongName) {
   if (audioStatus == AudioStatus.play && currentPlayMusic == cardSongName) {
     return const Icon(Icons.pause);
   } else if ((audioStatus == AudioStatus.stop ||
@@ -10,6 +11,6 @@ Widget musicStatusIcon(
       currentPlayMusic == cardSongName) {
     return const Icon(Icons.play_arrow);
   } else {
-    return const Opacity(opacity: 0.0);
+    return const SizedBox();
   }
 }
