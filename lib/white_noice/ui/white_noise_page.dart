@@ -17,6 +17,10 @@ class WhiteNoisePage extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('The music stopped because of the limit')));
           }
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content:
+                  Text("${state.audioStatus.toString()}:${state.music.name}"),
+              duration: const Duration(seconds: 1)));
         },
         child: BlocBuilder<AudioManagerBloc, AudioManagerState>(
           builder: (context, state) {

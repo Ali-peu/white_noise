@@ -40,7 +40,7 @@ class LocalNotificationService {
     }
   }
 
-  void showNotificationOnLimits(String tittle, String body) async {
+  Future<void> showNotificationOnLimits(String tittle, String body) async {
     await _notificationsPlugin.show(
         0,
         tittle,

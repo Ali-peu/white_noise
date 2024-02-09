@@ -1,6 +1,6 @@
 part of 'audio_play_bloc.dart';
 
-enum AudioStatus { initial, loading, play, pause, stop, limitStop, trackChange }
+enum AudioStatus { initial, play, pause, stop, limitStop, trackChange }
 
 final class AudioPlayState extends Equatable {
   const AudioPlayState(
